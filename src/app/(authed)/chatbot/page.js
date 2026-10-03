@@ -119,12 +119,16 @@ export default function ChatCultivAI() {
       let respostaTexto = "Desculpe, ocorreu um erro ao se comunicar com o CultivAI.";
       let formData = null;
 
+      // --- INÍCIO DA ALTERAÇÃO 1 ---
       if (data.success && data.parsedData) {
         respostaTexto = data.parsedData.resposta || "Sem resposta em texto.";
         if (data.parsedData.tipo === "coleta_dados") {
           formData = data.parsedData;
         }
+      } else if (data.message) {
+        respostaTexto = data.message; // mostra o motivo real (limite, 401, Groq indisponível...)
       }
+      // --- FIM DA ALTERAÇÃO 1 ---
 
       setMessages((prev) => prev.map(msg => msg.id === loadingId ? { ...msg, text: respostaTexto, form: formData } : msg));
     } catch (err) {
